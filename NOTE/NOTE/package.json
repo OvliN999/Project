@@ -1,0 +1,10 @@
+{
+  "name": "a-letter",
+  "version": "1.0.0",
+  "description": "Static site for A Love Letter",
+  "scripts": {
+    "start": "npx http-server -c-1 . -p 8080"
+  },
+  "author": "",
+  "license": "MIT"
+}

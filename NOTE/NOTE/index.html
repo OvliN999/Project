@@ -1,0 +1,148 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body id="bgc">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>A Love Letter | Aoudumber Bade</title>
+    <meta name="language" content="en-US">
+    <meta name="title" content="A Love Letter | Aoudumber Bade">
+    <meta name="github" content="https://github.com/Aoudumber-Bade">
+    <meta name="describe" content="Collecting resources isn't easy; your star is my motivation to keep going, and PRs are also welcome!">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/js.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <div class="mb-box">
+        <div class="bb">
+            <h2>A Little Letter</h2>
+            <div class="bb_text">
+                <div id="code">
+                    heyy <3 how are you? i know you’re alright, but i really wanted to tell you something…
+                    i know i’ve disappointed you before, and whatever happened that day still sits heavy on 
+                    my heart. i regret it every single moment it honestly feels like the biggest mistake,you’re
+                    always on my mind, all the time. whenever we talk and you ask, “why don’t you speak?”, it’s  
+                    because i get lost in you. and somewhere inside, this thought keeps pulling me back that 
+                    you’re so good to me, and i couldn’t give you the same in return. you’ve done so much for  
+                    me, even when it meant getting scolded or stepping way out of your limits. my words 
+                     might have hurt you, and that wound… i never meant to give it. it was never intentional. but still, you stayed. you crossed every boundary 
+                     just to be there for me, and i appreciate that more than you know. i feel blessed to have you
+                    
+                </div>
+            </div>
+            <p class="bb_myname">
+                - Yours... <br>
+            </p>
+        </div>
+    </div>
+
+    <audio id="media" src="kitna-kuch-kehna.mp3" autoplay muted playsinline loop preload="auto" controls></audio>
+
+    <button id="playAudio" style="position:fixed;right:20px;bottom:20px;z-index:999;padding:8px 12px;border-radius:6px;border:1px solid rgba(0,0,0,0.1);background:#fff;cursor:pointer;display:none">Unmute music</button>
+
+    <script>
+        Element.prototype.typewriter = function () {
+            var element = this,
+                content = element.innerHTML,
+                index = 0;
+            element.innerHTML = "";
+            var timer = setInterval(function () {
+                var currentChar = content.substr(index, 1);
+                if (currentChar === "<") {
+                    index = content.indexOf(">", index) + 1;
+                } else {
+                    index++;
+                }
+                element.innerHTML = content.substring(0, index) + (index & 1 ? "_" : "");
+                if (index >= content.length) {
+                    clearInterval(timer);
+                }
+            }, 150);
+            return this;
+        };
+        document.getElementById("code").typewriter();
+        // Autoplay strategy:
+        // - Start muted (muted autoplay is allowed by modern browsers)
+        // - On first user gesture (click/keydown), unmute and fade volume in
+        (function () {
+            var audio = document.getElementById('media');
+            var btn = document.getElementById('playAudio');
+            audio.src = encodeURI(audio.getAttribute('src'));
+
+            function tryPlayMuted() {
+                // Ensure muted for autoplay
+                audio.muted = true;
+                audio.volume = 0;
+                var p = audio.play();
+                if (p && typeof p.then === 'function') {
+                    p.then(function () {
+                        // muted autoplay succeeded
+                        btn.style.display = 'inline-block';
+                    }).catch(function () {
+                        // autoplay blocked even muted (rare) — show button
+                        btn.style.display = 'inline-block';
+                    });
+                } else {
+                    // play() not Promise — show button as fallback
+                    btn.style.display = 'inline-block';
+                }
+            }
+
+            function fadeInAndUnmute() {
+                try {
+                    audio.muted = false;
+                    // fade volume from 0 to 1 over 800ms
+                    var step = 0.05;
+                    var vol = 0.0;
+                    audio.volume = 0.0;
+                    audio.play().catch(function(){});
+                    var iv = setInterval(function () {
+                        vol = Math.min(1, vol + step);
+                        audio.volume = vol;
+                        if (vol >= 1) {
+                            clearInterval(iv);
+                        }
+                    }, 40);
+                } catch (e) {}
+                btn.style.display = 'none';
+                try { localStorage.setItem('aletter_audio_unmuted', '1'); } catch (e) {}
+            }
+
+            // Button explicit unmute
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                fadeInAndUnmute();
+            });
+
+            // First user gesture anywhere unmute
+            function onFirstGesture() {
+                fadeInAndUnmute();
+                window.removeEventListener('click', onFirstGesture);
+                window.removeEventListener('keydown', onFirstGesture);
+            }
+            window.addEventListener('click', onFirstGesture);
+            window.addEventListener('keydown', onFirstGesture);
+
+            // Try muted autoplay immediately
+            tryPlayMuted();
+
+            // If user previously allowed audio, try to unmute automatically
+            try {
+                if (localStorage.getItem('aletter_audio_unmuted') === '1') {
+                    // Delay slightly to ensure muted autoplay has started
+                    setTimeout(function () {
+                        fadeInAndUnmute();
+                    }, 250);
+                }
+            } catch (e) {
+                // ignore storage errors
+            }
+        })();
+    </script>
+  
+    <script type="text/javascript" src="js/count.js"></script>
+    <script type="text/javascript" async="" src="js/su.js"></script>
+
+</body>
+</html>
